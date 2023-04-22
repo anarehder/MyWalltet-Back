@@ -30,7 +30,7 @@ export async function signin(req, res) {
         if (!checkPassword) return res.status(401).send("Senha incorreta")
 
         const token = uuid()
-        await db.collection("sessoes").insertOne({ token, userID: user._id })
+        await db.collection("sessions").insertOne({ token, userID: user._id })
         res.send(token)
     } catch (err) {
         res.status(500).send(err.message)
@@ -39,9 +39,9 @@ export async function signin(req, res) {
 
 export async function logout(req, res) {
     try {
-        const sessao = res.locals.sessao
+        const sessions = res.locals.sessao
 
-        const result = await db.collection("sessoes").deleteOne({ userID: sessao.userID })
+        const result = await db.collection("sessions").deleteOne({ userID: sessions.userID })
 
         if (result.deletedCount === 0) return res.status(404).send("Erro ao fazer logout!")
         res.send("O usuário fez logout!")
