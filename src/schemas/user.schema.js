@@ -1,7 +1,12 @@
 import joi from "joi"
 
 export const userSchema = joi.object({
-    nome: joi.string().required(),
+    name: joi.string().required(),
     email: joi.string().email().required(),
-    senha: joi.string().required().min(3)
+    password: joi.string().required().min(3)
+})
+
+export const signInSchema = joi.object({
+    email: joi.string().email().required(),
+    password: joi.string().required().min(3)
 })
