@@ -21,7 +21,8 @@ export async function addOperations(req, res) {
 export async function showOperations(req, res) {
     try {
         const sessions = res.locals.sessao;
-        const operations = await db.collection("operations").find({userID: sessions.userID}).toArray()
+        const operations = await db.collection("operations").find({userID: sessions.userID}).sort({date: -1}).toArray()
+        console.log(operations)
         res.send(operations)
 
     } catch (err) {

@@ -25,13 +25,17 @@ export async function signin(req, res) {
     try {
         const user = await db.collection("users").findOne({ email })
         if (!user) return res.status(404).send("E-mail não cadastrado.")
+        console.log(user);
 
         const checkPassword = bcrypt.compareSync(password, user.password)
         if (!checkPassword) return res.status(401).send("Senha incorreta")
 
         const token = uuid()
         await db.collection("sessions").insertOne({ token, userID: user._id })
-        res.send(token)
+        const resposta = {name: user.name, email: user.email, userID: user._id, token};
+        console.log(resposta);
+        res.send(resposta)
+
     } catch (err) {
         res.status(500).send(err.message)
     }
@@ -39,11 +43,13 @@ export async function signin(req, res) {
 
 export async function logout(req, res) {
     try {
-        const sessions = res.locals.sessao
+        const sessions = res.locals.sessao;
+        console.log(sessions.token);
 
-        const result = await db.collection("sessions").deleteOne({ userID: sessions.userID })
+        const result = await db.collection("sessions").deleteOne({ token: sessions.token })
 
         if (result.deletedCount === 0) return res.status(404).send("Erro ao fazer logout!")
+
         res.send("O usuário fez logout!")
 
     } catch (err) {
