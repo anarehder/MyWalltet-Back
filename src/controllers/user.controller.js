@@ -42,6 +42,9 @@ export async function signin(req, res) {
 }
 
 export async function logout(req, res) {
+
+    const { name } = req.body
+
     try {
         const sessions = res.locals.sessao;
         console.log(sessions.token);
@@ -50,7 +53,7 @@ export async function logout(req, res) {
 
         if (result.deletedCount === 0) return res.status(404).send("Erro ao fazer logout!")
 
-        res.send("O usuário fez logout!")
+        res.send(`${name} fez logout!`)
 
     } catch (err) {
         res.status(500).send(err.message)
